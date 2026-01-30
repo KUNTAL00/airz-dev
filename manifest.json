@@ -1,0 +1,17 @@
+{
+  "name": "AIRZ",
+  "short_name": "AIRZ",
+  "start_url": "/airz-user-app/index.html",
+  "scope": "/airz-user-app/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6a00",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/airz-user-app/airz_splash_screen/screen.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
