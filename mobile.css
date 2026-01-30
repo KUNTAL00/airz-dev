@@ -1,0 +1,80 @@
+/* ===================================================
+   AIRZ GLOBAL MOBILE LOCK (NO ZOOM, NO BREAK)
+   =================================================== */
+
+/* Universal fix */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Root lock */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;              /* 🔒 No scroll / zoom */
+  font-family: Inter, sans-serif;
+  background: #f8f8f8;
+  -webkit-text-size-adjust: 100%; /* 🔒 Prevent font zoom */
+  touch-action: manipulation;    /* 🔒 Native app feel */
+}
+
+/* Main iframe app */
+#app {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Page wrapper (optional but safe) */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Space for bottom navigation */
+.with-nav {
+  padding-bottom: 72px;
+}
+
+/* Prevent input zoom (iOS / Android fix) */
+input,
+textarea,
+select,
+button {
+  font-size: 16px !important;
+  touch-action: manipulation;
+}
+
+/* Images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Buttons native feel */
+button {
+  touch-action: manipulation;
+}
+/* ===== Mobile frame lock ===== */
+#mobile-frame {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #f8f8f8;
+}
+
+#app {
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  border: none;
+  background: #fff;
+}
