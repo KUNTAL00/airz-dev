@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enable Location</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ff5724",
+            background: "#f8f6f5"
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background font-display text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Spacer for status bar -->
+  <div class="h-12"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 flex flex-col items-center justify-center px-6 text-center">
+
+    <!-- IMAGE -->
+    <div class="w-full max-w-xs mb-8">
+      <img
+        src="./screen.png"
+        alt="Enable Location"
+        class="w-full h-auto object-contain rounded-xl"
+      />
+    </div>
+
+    <!-- TEXT -->
+    <h1 class="text-2xl font-bold mb-3">Enable Your Location</h1>
+    <p class="text-slate-500 mb-8">
+      To show nearby restaurants and ensure faster delivery right to your doorstep.
+    </p>
+
+    <!-- ACTIONS -->
+    <div class="w-full max-w-md space-y-4">
+      <button
+        onclick="goHomeFromLocation()"
+        class="w-full flex items-center justify-center gap-2 bg-primary text-white py-4 rounded-xl font-semibold shadow-md">
+        <span class="material-symbols-outlined">my_location</span>
+        Use Current Location
+      </button>
+
+      <button
+        onclick="goHomeFromLocation()"
+        class="w-full py-3 rounded-xl border border-gray-300 text-slate-600 font-medium">
+        Select Location Manually
+      </button>
+    </div>
+
+    <p class="text-xs text-slate-400 mt-6">
+      We only access your location while you are using the app.
+    </p>
+  </main>
+
+  <!-- SAFE NAVIGATION -->
+<script>
+function goHomeFromLocation() {
+
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // Save location
+      localStorage.setItem("airz_location_allowed", "1");
+      localStorage.setItem("airz_latitude", lat);
+      localStorage.setItem("airz_longitude", lng);
+
+      console.log("Location:", lat, lng);
+
+      // Go to home safely
+      if (window.parent && typeof window.parent.goHome === "function") {
+        window.parent.goHome();
+      } else {
+        window.location.href = "../airz_home_dashboard/index.html";
+      }
+    },
+    function (error) {
+      alert("Location permission denied");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000
+    }
+  );
+}
+</script>
+
+</body>
+</html>

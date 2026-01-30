@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Explore &amp; Search Food</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff5724", // Warm Red/Orange
+                        "background-light": "#f8f6f5", // Soft Off-white
+                        "background-dark": "#23140f", // Dark Coffee/Brown
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2f1f1a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Veg/Non-Veg Marks */
+        .veg-mark {
+            border: 2px solid #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            padding: 2px;
+            border-radius: 4px;
+        }
+        .veg-dot {
+            background-color: #16a34a;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .non-veg-mark {
+            border: 2px solid #dc2626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            padding: 2px;
+            border-radius: 4px;
+        }
+        .non-veg-triangle {
+             width: 0; 
+             height: 0; 
+             border-left: 4px solid transparent;
+             border-right: 4px solid transparent;
+             border-top: 8px solid #dc2626;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#181210] dark:text-gray-100 font-display min-h-screen flex flex-col antialiased selection:bg-primary/20">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 pt-4 pb-2 transition-colors">
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-col flex-1">
+<div class="flex items-center gap-1 text-primary text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                    Home
+                </div>
+<div class="flex items-center gap-1 cursor-pointer group">
+<h1 class="text-lg font-bold leading-tight truncate max-w-[200px] text-gray-900 dark:text-white">
+                        Vijaya Nagar, Indore
+                    </h1>
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-primary transition-colors text-[20px]">expand_more</span>
+</div>
+</div>
+<button class="relative p-2 rounded-full bg-white dark:bg-surface-dark shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-gray-800 dark:text-white">shopping_bag</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white dark:border-surface-dark"></span>
+</button>
+</div>
+<!-- Search Bar embedded in header for sticky behavior -->
+<div class="mt-4 pb-1">
+<label class="relative flex w-full items-center">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="material-symbols-outlined text-primary">search</span>
+</div>
+<input class="block w-full rounded-xl border-none bg-white dark:bg-surface-dark py-3.5 pl-12 pr-12 text-sm shadow-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-all" placeholder="Search for 'Biryani' or 'Pizza'..." type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 border-l border-gray-100 dark:border-gray-700 pl-3 ml-2">
+<span class="material-symbols-outlined text-gray-400">mic</span>
+</div>
+</label>
+</div>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 flex flex-col gap-6 overflow-x-hidden pb-24">
+<!-- Filter Chips -->
+<div class="w-full overflow-x-auto hide-scrollbar pl-4 pr-4 pt-2">
+<div class="flex gap-3">
+<!-- Chip: Veg -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-3 shadow-sm active:scale-95 transition-transform">
+<span class="veg-mark"><span class="veg-dot"></span></span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-200">Pure Veg</span>
+</button>
+<!-- Chip: Rating -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-3 shadow-sm active:scale-95 transition-transform">
+<span class="text-amber-500 material-symbols-outlined text-[18px] fill-1">star</span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-200">Rating 4.0+</span>
+</button>
+<!-- Chip: Fast Delivery (Active) -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 border border-primary/20 px-3 active:scale-95 transition-transform">
+<span class="text-primary material-symbols-outlined text-[18px]">bolt</span>
+<span class="text-sm font-semibold text-primary">Fast Delivery</span>
+</button>
+<!-- Chip: Offers -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-3 shadow-sm active:scale-95 transition-transform">
+<span class="text-blue-600 material-symbols-outlined text-[18px]">percent</span>
+<span class="text-sm font-medium text-gray-700 dark:text-gray-200">Offers</span>
+</button>
+</div>
+</div>
+<!-- Categories Section -->
+<section class="flex flex-col gap-2">
+<div class="px-4 flex items-center justify-between">
+<h2 class="text-[1.35rem] font-bold text-gray-900 dark:text-white tracking-tight">Eat what makes you happy</h2>
+</div>
+<div class="grid grid-cols-4 gap-y-6 gap-x-2 px-4 pt-2">
+<!-- Item 1 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Plate of aromatic Chicken Biryani with spices" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdRgZz_sYGI4yJwtfa-AJ-JmHpwmBpnqsDxRpKij2rI31wDmfEbJdSPOazP28hnK7M7utKOlm5XzZkzbHgghk_EzQ4GDBKuJV8axxsaFRmvaUkc-4R2Sx_navo4SYkE5fOK0l63TOL8mKDR7AXJGlyrZojY6Z9oGwPsQlfNJzttIuf1SX_DneBhGcVEzSab451Ogw3hM7NMLisZp2WTTFgyvjBkx_qyDqkcFgwc3hSMFVg4VmGXoUaKAtGE12cR4009WBz2jXrMl8');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Biryani</span>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Cheesy pepperoni pizza slice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkJ0prVTcOk7-py3UWuxAXgmzYvTYUvtFHr_1Vb1uW4fkRc_pSwXXDbUzPzw6j6UUtdEWnNld7wI0mBNhYDAPsdbICAvmS1SAZng2pIm3e7wowzukbGrSVjti_rL8TtuFt_O58RwmxrdbAmzH7TzTMCS-qqxNhEGnYrPUm2ZkSwMJUCycWo4HRPNZ0KEyml1Qx4vSAyNWcG8vKZ4AsczgBe7eYuZrlm3SM1ThHRl1Yz4hBFyAwYsN17jeNXKNtCaktTFoK96sDj9A');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Pizza</span>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Traditional Indian Thali with various bowls" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4HQl_wQ4sNKRthrSbqmSpWYwrXmXC2Q7b4beYvf1uOYA4zvUNk5ltF-LNKDh7Sr4uvsGGDhAnmaDi6ocgjbPDeYUEH0IQbZ5vmAznuf6Oe1Apn66nC-zUORb8DLy5L9vzb2C1pIiCXD92GrgRvoNobogHYdJ3w_5yjCIdJFt1j8kmYDFKdYwOTCyKZHr23BQmqjXtGfIlhVBhniQPHOJGwy8KH5OfcpZaM2K0jHTXKISVnY-fd1Kd5hJFFGnd7HFoWFRb1jPcPXQ');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Thali</span>
+</div>
+<!-- Item 4 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Juicy beef burger with lettuce and cheese" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwfVkuDeLxgAUoQ1SUUpm6HAY81Hp_vmbyJzy6IXr2fwzy9ZR3okkov5XFAkQVQQ2GYXXN1_3riQ6AEngXaQIYuSvLAQYcacbeS1Af5RtpNLhvZ-npn4TbYEHM8hV-5M_vQ-3qCmmTsmSZJMPwOO8nS-Nl3yAVFYFai8-9DzhdsvxgZ_q2Pa2WPDMpVGq0dzh2CkV6HLB4gQpmCVfrWYabZ2rp_FnWWHomzpCjpQO_0UUe8yz_7iU-v2bFPDaaex6OVK7P2E_HaaM');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Burger</span>
+</div>
+<!-- Item 5 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Freshly baked rolls with stuffing" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAU5TJjMzluvizDy6hSHzG7rfUxkQSKYgW6kKsD7BTPZXqDJ6fGPL75ZwZ5QvEqeP8rtPRZgcfpFxoBGlEnk-mG1QI_F9-vtZtgZFtbJGmRm_HLg7ME1oQb0heiFKO2AqcqJXM-CPxa0hGUPxJktV2sUCTqBNTkyQGPIPjeDHtcU1K1uCK98YqAiI4HgZAerjtTC2GqCVlKdWynsx9zTHwAFFd58sm9PvW4ltG-UmXB1Gurj9btKyKNQDCi6Zn_x6JFlmZZJGwZNmo');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Rolls</span>
+</div>
+<!-- Item 6 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Crispy Masala Dosa with chutney" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzNDDx3FbyUYhz9vc63o79A6cnABAz8eTCaUNgGH2TIZledE2wOi5mo-iyDgCY_bGrrl2gHOhuzZInAHUFi-5OuY5ZhJnoY_3i-iq6GoIxj6dQH27aEChBbL7XhAJhoUdxWF1akruI5P1JqyOrdyIq-AyXngo1cQEouK32yq_1-zcAv-dfxDfJXsxhe-upbehOPH_G3g7oULk36pDF3fI1-e7n_pbZJUNkJvbz4eXudWxwg32psVoi4P7wXcu3Q3jyP1WzmX77pcE');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Dosa</span>
+</div>
+<!-- Item 7 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Sweet indian dessert Gulab Jamun" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCL9eSyiWaGvr2JMfhIMF4KFzgZgJ9Ysn3xa7quD-IGnaWH99BUlSHo4Y7ll8uoLnyZDXzc9I6nGnxJocgSfqeOaXw4_Id9wmaT1OsRuE4RBqPfGzNPH_-6q-LBTrgeT0amE8Safmr8IFKtAVtG6qpbb2BJUNY_HZ6HWqIOmvrbHzyejrWkQ28WyR-oC2T3evZZRlq6ohdfOevzZJmSX2FcnOEqNwskH6oeteWD7xWXHLoqnmSrjI2PxX-REIkkZlxgwTPfKgWsYbw');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Sweets</span>
+</div>
+<!-- Item 8 -->
+<div class="flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-surface-dark group-hover:scale-105 transition-transform bg-gray-100">
+<div class="w-full h-full bg-cover bg-center" data-alt="Healthy salad bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCMxwz1PXLyuA97LPT79oy0NT9UCp1y_qmKOg919gShSTXx2TZpm_oOBpOTUjbEFUAZl6NqL1POK8iwp1X4BdXAn_-CQZHL1Mj-Kj8TtrMTBQpIAjlTp-YLm-pAEw_G-facFNzD6AEx1Qa8rVsGsbLt6L_41p2ao5O9SE0ZVOMKGIeU6565q-CbbtsBs_OsaHJc9zalKDJaWOv-RSqLiK5pgVTMTEiPzcjPr9NCw6MTuWw57geUCh-4Q-xksJKlKCyrnldstlWN848');"></div>
+</div>
+<span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Healthy</span>
+</div>
+</div>
+</section>
+<!-- Divider -->
+<div class="h-2 bg-gray-100 dark:bg-surface-dark/50"></div>
+<!-- Trending Section -->
+<section class="flex flex-col gap-4 px-4">
+<div class="flex items-center justify-between">
+<h2 class="text-[1.35rem] font-bold text-gray-900 dark:text-white tracking-tight">Trending Near You</h2>
+<button class="text-sm font-semibold text-primary">See all</button>
+</div>
+<!-- Restaurant Card 1 -->
+<div class="flex gap-4 bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="relative w-28 h-28 shrink-0 rounded-lg overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Indian restaurant interior and food spread" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIdMYcr-o5LHxjLF2BtPn03-Ny-GNlPrv1PmeVG6hM0koFhvb4eUmm2puu-r4cqXJmXcy6WjaPLM4r7CnpQyqqaCmcjnzvTMQIdS6CPbK4hm_CHb8W2I4abD4DgEnnFQG-P3pByVhmcrYFEvYqSfoxkqCNmjAd1vm1QGEhf82OCvMENejSCOTN4bjccv9vBy-OZi4_z9D-HrXVfn9Yb4-eQT4LRnWe79DA2TUCzpWGc148oHCfEiJ75vEOHIccs4HjQCE7PzbmFpY');"></div>
+<div class="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-bold text-primary uppercase shadow-sm">
+                        50% OFF
+                    </div>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex items-start justify-between">
+<h3 class="font-bold text-lg text-gray-900 dark:text-white leading-tight">Guru Kripa</h3>
+<div class="veg-mark shrink-0 mt-1" title="Pure Veg"><div class="veg-dot"></div></div>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">South Indian • Chinese • Fast Food</p>
+</div>
+<div class="flex items-center gap-3 mt-2">
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] text-green-700 dark:text-green-400 fill-1">star</span>
+<span class="text-xs font-bold text-green-700 dark:text-green-400">4.2</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<div class="flex items-center gap-1">
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">25 mins</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<span class="text-xs text-gray-500">₹200 for two</span>
+</div>
+</div>
+</div>
+<!-- Restaurant Card 2 -->
+<div class="flex gap-4 bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="relative w-28 h-28 shrink-0 rounded-lg overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Gourmet burger with fries" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfF5LpfkdjyMB4GcRkOYKAjNvD7wVmCCaZPC96X0rhz2_vjmVzdqOOZ5wRuxi6do0WE-flr9hx-HcUwBPHKLN4femybIty5bV1J8HZHs4B6xjkUWlAw3bO5F9iqfo6RU3zk4eaXtQPCFKpFf_IuaPEyRqUqnmvPmk5KyYtLe2T6vScEh9LFcwVkv7EWVCWfYNUYOALE7wk4IjeJxX6Dk9Ko3zOBtx5JfeoTkY8G4jHKNV7NRpxhaQo9s9I-NPebApu8Dx6euA1WJo');"></div>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex items-start justify-between">
+<h3 class="font-bold text-lg text-gray-900 dark:text-white leading-tight">Burger Farm</h3>
+<div class="non-veg-mark shrink-0 mt-1" title="Non Veg"><div class="non-veg-triangle"></div></div>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Burgers • Beverages • American</p>
+</div>
+<div class="flex items-center gap-3 mt-2">
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] text-green-700 dark:text-green-400 fill-1">star</span>
+<span class="text-xs font-bold text-green-700 dark:text-green-400">4.5</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<div class="flex items-center gap-1">
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">35 mins</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<span class="text-xs text-gray-500">₹350 for two</span>
+</div>
+</div>
+</div>
+<!-- Restaurant Card 3 -->
+<div class="flex gap-4 bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="relative w-28 h-28 shrink-0 rounded-lg overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Indian thali with diverse dishes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDTURtrTpibFTxU8GkO_EC_5IjTrz0Oinm34z1ZI120dnUen61tQXP__U1Z7tPRyikTbhv1_P7PCGYDynwfnCKTzz54sLS3I0FRELunzhBORT8gkZ-r3tWPY2gK1LKPT9VlYd_rzJLtkY93T1J8jYDI4PzhE6Uud6727V4mV_u1crFutKoZxicqi4TeELrni3YwgFnJfA1-TIAeMCVI90WJupGxFb7BA9CHi5jakB1zDx-mftzRWmDIY585F00dB0pdpCjeIgXtV1A');"></div>
+<div class="absolute top-2 left-2 bg-primary px-1.5 py-0.5 rounded text-[10px] font-bold text-white uppercase shadow-sm">
+                        PRO
+                    </div>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex items-start justify-between">
+<h3 class="font-bold text-lg text-gray-900 dark:text-white leading-tight">Naivedya</h3>
+<div class="veg-mark shrink-0 mt-1" title="Pure Veg"><div class="veg-dot"></div></div>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">North Indian • Thali • Punjabi</p>
+</div>
+<div class="flex items-center gap-3 mt-2">
+<div class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] text-green-700 dark:text-green-400 fill-1">star</span>
+<span class="text-xs font-bold text-green-700 dark:text-green-400">4.0</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<div class="flex items-center gap-1">
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">42 mins</span>
+</div>
+<span class="text-xs font-medium text-gray-500">•</span>
+<span class="text-xs text-gray-500">₹400 for two</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Large image Card for Promotion/Special -->
+<div class="px-4">
+<div class="relative w-full h-48 rounded-xl overflow-hidden shadow-md">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Assortment of indian street food spices and dishes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHRqb8R0BEWjTHfxeeEpeL9CsnKbA2Lkq_GDIFgIAiYGGqZeNFQcWPf7sUPX5s-qPYbMLw8gaXpEPnGb6VTSwrRE0oDP13YZxJC2I23VH9MLtYR_1Lnyh7zW9C04gYkye1wnA62-H8GJ3Z78EVwITvl-E1EcMHpLEBD1z552h11Ms9kiuzB5BPNLa3vU7c3OJdBf_DOFW4WzWBUiafzBF20QrNik7m4uPNmTfjtiV656iC_WwqrAlngWPKuvrMee6_VB2DMGZLmlQ');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Spotlight</p>
+<h3 class="text-xl font-bold">Best Street Food</h3>
+<p class="text-sm text-gray-200">Explore the flavors of Sarafa Bazaar</p>
+</div>
+</div>
+</div>
+</main>
+</nav>
+<div class="h-6 w-full bg-white dark:bg-surface-dark fixed bottom-0 z-40"></div> <!-- Safe area filler -->
+</body></html>

@@ -1,0 +1,6 @@
+{
+  "appId": "airz.app",
+  "appName": "AIRZApp",
+  "webDir": "web",
+  "bundledWebRuntime": false
+}

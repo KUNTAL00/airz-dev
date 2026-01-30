@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+<title>AIRZ Login</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { primary: "#ff5724" },
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"]
+      }
+    }
+  }
+}
+</script>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: black;
+    overflow: hidden;
+  }
+
+  /* main page wrapper */
+  .app {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* login card */
+  .card {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* input zoom fix */
+  input {
+    font-size: 16px !important;
+  }
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- Background -->
+  <img src="https://images.unsplash.com/photo-1600628422019-95a2b4f7f1f0"
+       class="absolute inset-0 w-full h-full object-cover blur-sm scale-105"/>
+  <div class="absolute inset-0 bg-black/60"></div>
+
+  <!-- Logo -->
+  <div class="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-4">
+    <h1 class="text-white text-4xl font-poppins font-bold">AIRZ</h1>
+    <p class="text-white/80 text-sm tracking-widest mt-2">
+      TIER 1 TASTE, ANYWHERE
+    </p>
+  </div>
+
+  <!-- Login Card -->
+  <div class="relative z-10 bg-white rounded-t-3xl px-6 pt-6 card">
+
+    <h2 class="text-2xl font-bold mb-1">Welcome Back!</h2>
+    <p class="text-gray-500 mb-6">Order your favorite meals in seconds.</p>
+
+    <!-- Mobile -->
+    <div class="flex items-center border rounded-xl px-3 py-3 mb-5">
+      <span class="mr-2">🇮🇳</span>
+      <span class="mr-2 font-medium">+91</span>
+      <input id="mobile" type="tel" maxlength="10"
+             placeholder="Mobile Number"
+             class="flex-1 outline-none"/>
+    </div>
+
+    <!-- Continue -->
+    <button onclick="goOTP()"
+      class="w-full bg-primary text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+      Continue
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+
+    <!-- Terms -->
+    <p class="text-xs text-center text-gray-400 mt-4">
+      By clicking “Continue”, you agree to our
+      <a href="#" class="text-primary">Terms</a> &
+      <a href="#" class="text-primary">Privacy Policy</a>
+    </p>
+
+  </div>
+</div>
+
+<script>
+function goOTP() {
+  const mobile = document.getElementById("mobile").value.trim();
+  if (mobile.length !== 10) {
+    alert("Enter valid mobile number");
+    return;
+  }
+  localStorage.setItem("airz_user_mobile", mobile);
+  window.location.href = "../otp_verification_screen/index.html";
+}
+
+/* keyboard focus center */
+const input = document.getElementById("mobile");
+input.addEventListener("focus", () => {
+  setTimeout(() => {
+    input.scrollIntoView({behavior:"smooth", block:"center"});
+  }, 300);
+});
+</script>
+
+</body>
+</html>

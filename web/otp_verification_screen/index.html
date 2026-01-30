@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Verify OTP</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+    .otp-input {
+      width: 56px;
+      height: 56px;
+      font-size: 22px;
+      text-align: center;
+      border-radius: 14px;
+      border: 2px solid #e5e7eb;
+    }
+    .otp-input:focus {
+      border-color: #ff5724;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body class="bg-white h-screen overflow-hidden">
+
+<!-- FULL SCREEN CENTER -->
+<div class="h-full flex flex-col justify-center items-center px-6 text-center">
+
+  <!-- Header -->
+  <div class="absolute top-6 left-6 right-6 flex justify-between items-center">
+    <button onclick="goBack()" class="text-xl">←</button>
+    <span class="text-sm text-orange-500 font-medium">Help</span>
+  </div>
+
+  <!-- Icon -->
+  <div class="w-24 h-24 rounded-full bg-orange-100 flex items-center justify-center mb-6">
+    <span class="material-symbols-outlined text-4xl">smartphone</span>
+  </div>
+
+  <!-- Title -->
+  <h2 class="text-2xl font-bold mb-2">Verify Phone</h2>
+  <p class="text-gray-500 mb-6">
+    Code is sent to<br>
+    <span id="mobileText" class="font-semibold"></span>
+  </p>
+
+  <!-- OTP -->
+  <div class="flex gap-4 mb-8">
+    <input type="tel" maxlength="1" class="otp-input" oninput="moveNext(this,0)">
+    <input type="tel" maxlength="1" class="otp-input" oninput="moveNext(this,1)">
+    <input type="tel" maxlength="1" class="otp-input" oninput="moveNext(this,2)">
+    <input type="tel" maxlength="1" class="otp-input" oninput="moveNext(this,3)">
+  </div>
+
+  <!-- Button -->
+  <div class="w-full max-w-sm">
+    <button onclick="verifyOTP()" class="w-full bg-[#ff5724] text-white py-3 rounded-xl font-semibold">
+      Verify & Proceed
+    </button>
+  </div>
+
+  <!-- Resend -->
+  <p class="text-sm text-gray-400 mt-4">
+    Didn’t receive code?
+    <button onclick="resendOTP()" class="text-orange-500 font-medium">Resend OTP</button>
+    <span id="timer">(30)</span>
+  </p>
+
+</div>
+
+<script>
+  const inputs = document.querySelectorAll(".otp-input");
+  const CORRECT_OTP = "1234";
+
+  document.getElementById("mobileText").innerText =
+    "+91 " + (localStorage.getItem("airz_user_mobile") || "XXXXXXXXXX");
+
+  inputs[0].focus();
+
+  function moveNext(el, index) {
+    if (el.value.length === 1 && index < 3) {
+      inputs[index + 1].focus();
+    }
+  }
+
+  function verifyOTP() {
+    let otp = "";
+    inputs.forEach(i => otp += i.value);
+
+    if (otp === CORRECT_OTP) {
+      localStorage.setItem("airz_user_logged", "1");
+      parent.showNav();
+      parent.app.src = "location_access_request/index.html";
+    } else {
+      alert("Invalid OTP (use 1234)");
+    }
+  }
+
+  function goBack() {
+    parent.app.src = "modern_login_screen/index.html";
+  }
+
+  let t = 30;
+  const timerEl = document.getElementById("timer");
+
+  setInterval(() => {
+    if (t > 0) {
+      t--;
+      timerEl.innerText = "(" + t + ")";
+    }
+  }, 1000);
+
+  function resendOTP() {
+    t = 30;
+    timerEl.innerText = "(30)";
+    inputs.forEach(i => i.value = "");
+    inputs[0].focus();
+    alert("Dummy OTP resent: 1234");
+  }
+</script>
+
+</body>
+</html>

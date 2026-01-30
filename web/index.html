@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Mobile lock -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+
+  <title>AIRZ App</title>
+
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #f8f8f8;
+      font-family: Inter, sans-serif;
+      overflow: hidden;
+    }
+
+    #mobile-frame {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      background: #f8f8f8;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      border: none;
+      background: #ffffff;
+      display: block;
+    }
+
+    #nav {
+      height: 64px;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .with-nav {
+      height: calc(100vh - 64px) !important;
+    }
+
+    #nav button {
+      flex: 1;
+    }
+
+    #nav .material-symbols-outlined {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    #nav .text-xs {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- MOBILE FRAME -->
+  <div id="mobile-frame">
+    <iframe id="app"></iframe>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav
+    id="nav"
+    class="fixed bottom-0 left-0 w-full bg-white border-t hidden z-50"
+  >
+    <div class="flex justify-between items-center h-full px-4">
+      <button
+        onclick="goHome()"
+        class="flex flex-col items-center text-orange-500"
+      >
+        <span class="material-symbols-outlined">home</span>
+        <span class="text-xs">Home</span>
+      </button>
+
+      <button
+        onclick="goSaved()"
+        class="flex flex-col items-center text-gray-400"
+      >
+        <span class="material-symbols-outlined">favorite</span>
+        <span class="text-xs">Saved</span>
+      </button>
+
+      <button
+        onclick="goCart()"
+        class="h-12 w-12 bg-orange-500 text-white rounded-full flex items-center justify-center -mt-6"
+      >
+        <span class="material-symbols-outlined">shopping_bag</span>
+      </button>
+
+      <button
+        onclick="goSearch()"
+        class="flex flex-col items-center text-gray-400"
+      >
+        <span class="material-symbols-outlined">search</span>
+        <span class="text-xs">Explore</span>
+      </button>
+
+      <button
+        onclick="goProfile()"
+        class="flex flex-col items-center text-gray-400"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span class="text-xs">Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    const app = document.getElementById("app");
+    const nav = document.getElementById("nav");
+
+    function showNav() {
+      nav.style.display = "block";
+      app.classList.add("with-nav");
+    }
+
+    function hideNav() {
+      nav.style.display = "none";
+      app.classList.remove("with-nav");
+    }
+
+    function goHome() {
+      showNav();
+      app.src = "airz_home_dashboard/index.html";
+    }
+
+    function goSaved() {
+      showNav();
+      app.src = "favourite/index.html";
+    }
+
+    function goSearch() {
+      showNav();
+      app.src = "explore_&_search_food/index.html";
+    }
+
+    function goCart() {
+      showNav();
+      app.src = "my_cart_&_checkout/index.html";
+    }
+
+    function goProfile() {
+      showNav();
+      app.src = "user_account_profile/index.html";
+    }
+
+    /* ===== APP START FLOW ===== */
+    hideNav();
+
+    const isLoggedIn =
+      localStorage.getItem("airz_user_logged") === "1";
+    const locationAllowed =
+      localStorage.getItem("airz_location_allowed") === "1";
+
+    if (isLoggedIn) {
+      if (locationAllowed) {
+        showNav();
+        app.src = "airz_home_dashboard/index.html";
+      } else {
+        app.src = "location_access_request/index.html";
+      }
+    } else {
+      app.src = "airz_splash_screen/index.html";
+      setTimeout(() => {
+        app.src = "modern_login_screen/index.html";
+      }, 2000);
+    }
+  </script>
+
+  <script src="update_check.js"></script>
+</body>
+</html>
